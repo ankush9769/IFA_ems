@@ -23,6 +23,11 @@ export const listProjects = async (req, res, next) => {
   try {
     const filters = buildProjectFilters(req.query);
 
+    // Filter by employee if assigned=true is requested
+    if (req.query.assigned === 'true' && req.user?.employeeRef) {
+      filters.assignees = req.user.employeeRef;
+    }
+
     // Optionally add role-based restrictions in future (e.g., client -> only their projects)
     if (req.user?.role === 'client' && req.user?.clientRef) {
       // If a client requested, restrict them to their linked client projects

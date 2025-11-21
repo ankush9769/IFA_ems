@@ -23,8 +23,11 @@ export const useAuthStore = create(
         set({ user: null, tokens: null });
         // Clear localStorage
         localStorage.removeItem('ifa-ems-auth');
-        // Redirect to login
-        window.location.href = '/login';
+        // Clear all cached data
+        localStorage.clear();
+        sessionStorage.clear();
+        // Redirect to landing page
+        window.location.href = '/';
       },
     }),
     { name: 'ifa-ems-auth' },
