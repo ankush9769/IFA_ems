@@ -91,43 +91,43 @@ const AdminDashboard = () => {
   }, [projects]);
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+    <div className="w-full max-w-7xl mx-auto space-y-4 md:space-y-6">
+      <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Admin Dashboard</h1>
       
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-        <div className="bg-white rounded-lg shadow p-6 text-center">
-          <div className="text-3xl font-bold text-sky-500">{stats.total}</div>
-          <div className="text-gray-500 text-sm mt-1">Total Projects</div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 md:gap-4">
+        <div className="bg-white rounded-lg shadow p-4 md:p-6 text-center">
+          <div className="text-2xl md:text-3xl font-bold text-sky-500">{stats.total}</div>
+          <div className="text-gray-500 text-xs md:text-sm mt-1">Total Projects</div>
         </div>
-        <div className="bg-white rounded-lg shadow p-6 text-center">
-          <div className="text-3xl font-bold text-amber-500">{stats.contactMade}</div>
-          <div className="text-gray-500 text-sm mt-1">New Requests</div>
+        <div className="bg-white rounded-lg shadow p-4 md:p-6 text-center">
+          <div className="text-2xl md:text-3xl font-bold text-amber-500">{stats.contactMade}</div>
+          <div className="text-gray-500 text-xs md:text-sm mt-1">New Requests</div>
         </div>
-        <div className="bg-white rounded-lg shadow p-6 text-center">
-          <div className="text-3xl font-bold text-emerald-500">{stats.active}</div>
-          <div className="text-gray-500 text-sm mt-1">Active</div>
+        <div className="bg-white rounded-lg shadow p-4 md:p-6 text-center">
+          <div className="text-2xl md:text-3xl font-bold text-emerald-500">{stats.active}</div>
+          <div className="text-gray-500 text-xs md:text-sm mt-1">Active</div>
         </div>
-        <div className="bg-white rounded-lg shadow p-6 text-center">
-          <div className="text-3xl font-bold text-red-500">{stats.unassigned}</div>
-          <div className="text-gray-500 text-sm mt-1">Unassigned</div>
+        <div className="bg-white rounded-lg shadow p-4 md:p-6 text-center">
+          <div className="text-2xl md:text-3xl font-bold text-red-500">{stats.unassigned}</div>
+          <div className="text-gray-500 text-xs md:text-sm mt-1">Unassigned</div>
         </div>
-        <div className="bg-white rounded-lg shadow p-6 text-center">
-          <div className="text-3xl font-bold text-purple-500">{stats.completed}</div>
-          <div className="text-gray-500 text-sm mt-1">Completed</div>
+        <div className="bg-white rounded-lg shadow p-4 md:p-6 text-center">
+          <div className="text-2xl md:text-3xl font-bold text-purple-500">{stats.completed}</div>
+          <div className="text-gray-500 text-xs md:text-sm mt-1">Completed</div>
         </div>
         {stats.overdue > 0 && (
-          <div className="bg-red-50 rounded-lg shadow p-6 text-center">
-            <div className="text-3xl font-bold text-red-600">{stats.overdue}</div>
-            <div className="text-red-800 text-sm mt-1">Overdue</div>
+          <div className="bg-red-50 rounded-lg shadow p-4 md:p-6 text-center">
+            <div className="text-2xl md:text-3xl font-bold text-red-600">{stats.overdue}</div>
+            <div className="text-red-800 text-xs md:text-sm mt-1">Overdue</div>
           </div>
         )}
       </div>
 
       <div className="bg-white rounded-lg shadow">
-        <div className="p-6 border-b border-gray-200">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <h2 className="text-xl font-semibold text-gray-900">All Projects</h2>
+        <div className="p-4 md:p-6 border-b border-gray-200">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
+            <h2 className="text-lg md:text-xl font-semibold text-gray-900">All Projects</h2>
             <div className="flex flex-wrap gap-3">
               <InlineSelect
                 label="Status"
@@ -156,33 +156,33 @@ const AdminDashboard = () => {
 
         <div className="overflow-x-auto">
           {isLoading ? (
-            <div className="p-8 text-center text-gray-500">Loading projects...</div>
+            <div className="p-6 md:p-8 text-center text-gray-500 text-sm md:text-base">Loading projects...</div>
           ) : projects.length === 0 ? (
-            <div className="p-8 text-center text-gray-500">No projects found</div>
+            <div className="p-6 md:p-8 text-center text-gray-500 text-sm md:text-base">No projects found</div>
           ) : (
-            <table className="w-full">
+            <table className="w-full min-w-[1000px]">
               <thead className="bg-gray-50 border-b border-gray-200">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Client</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priority</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Assigned</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lead</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">End</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  <th className="px-3 md:px-6 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Client</th>
+                  <th className="px-3 md:px-6 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                  <th className="px-3 md:px-6 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                  <th className="px-3 md:px-6 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  <th className="px-3 md:px-6 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priority</th>
+                  <th className="px-3 md:px-6 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Assigned</th>
+                  <th className="px-3 md:px-6 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lead</th>
+                  <th className="px-3 md:px-6 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start</th>
+                  <th className="px-3 md:px-6 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">End</th>
+                  <th className="px-3 md:px-6 py-2 md:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {projects.map((project) => (
                   <tr key={project._id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap font-medium text-gray-900">{project.clientName}</td>
-                    <td className="px-6 py-4 max-w-xs truncate text-gray-600">
+                    <td className="px-3 md:px-6 py-3 md:py-4 whitespace-nowrap font-medium text-gray-900 text-sm">{project.clientName}</td>
+                    <td className="px-3 md:px-6 py-3 md:py-4 max-w-xs truncate text-gray-600 text-sm">
                       {project.projectDescription || '—'}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-gray-600">{project.projectType || '—'}</td>
+                    <td className="px-3 md:px-6 py-3 md:py-4 whitespace-nowrap text-gray-600 text-sm">{project.projectType || '—'}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {editingCell?.projectId === project._id && editingCell?.field === 'status' ? (
                         <select

@@ -90,35 +90,35 @@ const ProjectAnalysis = () => {
   if (isLoading) return <div className="p-8 text-center">Loading analytics...</div>;
 
   return (
-    <div className="max-w-7xl mx-auto p-6 space-y-6">
-      <h1 className="text-3xl font-bold text-gray-900">Project Analysis</h1>
+    <div className="w-full max-w-7xl mx-auto space-y-4 md:space-y-6">
+      <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Project Analysis</h1>
 
       {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="text-sm text-gray-500">Total Projects</div>
-          <div className="text-3xl font-bold text-gray-900 mt-2">{analytics.totalProjects}</div>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+        <div className="bg-white rounded-lg shadow p-4 md:p-6">
+          <div className="text-xs md:text-sm text-gray-500">Total Projects</div>
+          <div className="text-2xl md:text-3xl font-bold text-gray-900 mt-1 md:mt-2">{analytics.totalProjects}</div>
         </div>
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="text-sm text-gray-500">Total Hours Logged</div>
-          <div className="text-3xl font-bold text-sky-500 mt-2">{analytics.totalHours}h</div>
+        <div className="bg-white rounded-lg shadow p-4 md:p-6">
+          <div className="text-xs md:text-sm text-gray-500">Total Hours Logged</div>
+          <div className="text-2xl md:text-3xl font-bold text-sky-500 mt-1 md:mt-2">{analytics.totalHours}h</div>
         </div>
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="text-sm text-gray-500">Avg Hours/Project</div>
-          <div className="text-3xl font-bold text-emerald-500 mt-2">{analytics.avgHoursPerProject}h</div>
+        <div className="bg-white rounded-lg shadow p-4 md:p-6">
+          <div className="text-xs md:text-sm text-gray-500">Avg Hours/Project</div>
+          <div className="text-2xl md:text-3xl font-bold text-emerald-500 mt-1 md:mt-2">{analytics.avgHoursPerProject}h</div>
         </div>
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="text-sm text-gray-500">Unassigned Projects</div>
-          <div className="text-3xl font-bold text-red-500 mt-2">{analytics.unassignedProjects}</div>
+        <div className="bg-white rounded-lg shadow p-4 md:p-6">
+          <div className="text-xs md:text-sm text-gray-500">Unassigned Projects</div>
+          <div className="text-2xl md:text-3xl font-bold text-red-500 mt-1 md:mt-2">{analytics.unassignedProjects}</div>
         </div>
       </div>
 
       {/* Charts Row 1 */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         {/* Status Breakdown */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Projects by Status</h2>
-          <ResponsiveContainer width="100%" height={300}>
+        <div className="bg-white rounded-lg shadow p-4 md:p-6">
+          <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-3 md:mb-4">Projects by Status</h2>
+          <ResponsiveContainer width="100%" height={250}>
             <PieChart>
               <Pie 
                 data={statusChartData} 
@@ -138,9 +138,9 @@ const ProjectAnalysis = () => {
         </div>
 
         {/* Priority Breakdown */}
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Projects by Priority</h2>
-          <ResponsiveContainer width="100%" height={300}>
+        <div className="bg-white rounded-lg shadow p-4 md:p-6">
+          <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-3 md:mb-4">Projects by Priority</h2>
+          <ResponsiveContainer width="100%" height={250}>
             <PieChart>
               <Pie 
                 data={priorityChartData} 
@@ -162,9 +162,10 @@ const ProjectAnalysis = () => {
 
       {/* Employee Workload */}
       {analytics.employeeWorkload.length > 0 && (
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Employee Workload</h2>
-          <ResponsiveContainer width="100%" height={300}>
+        <div className="bg-white rounded-lg shadow p-4 md:p-6">
+          <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-3 md:mb-4">Employee Workload</h2>
+          <div className="overflow-x-auto">
+            <ResponsiveContainer width="100%" height={300} minWidth={300}>
             <BarChart data={analytics.employeeWorkload}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
@@ -176,68 +177,69 @@ const ProjectAnalysis = () => {
               <Bar yAxisId="right" dataKey="hours" fill="#10b981" name="Hours" />
             </BarChart>
           </ResponsiveContainer>
+          </div>
         </div>
       )}
 
       {/* Project Types */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Projects by Type</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="bg-white rounded-lg shadow p-4 md:p-6">
+        <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-3 md:mb-4">Projects by Type</h2>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
           {typeChartData.map((item) => (
-            <div key={item.name} className="p-4 border border-gray-200 rounded-lg">
-              <div className="text-2xl font-bold text-gray-900">{item.value}</div>
-              <div className="text-sm text-gray-600 mt-1">{item.name}</div>
+            <div key={item.name} className="p-3 md:p-4 border border-gray-200 rounded-lg">
+              <div className="text-xl md:text-2xl font-bold text-gray-900">{item.value}</div>
+              <div className="text-xs md:text-sm text-gray-600 mt-1">{item.name}</div>
             </div>
           ))}
         </div>
       </div>
 
       {/* Client Type Distribution */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Client Type Distribution</h2>
-        <div className="grid grid-cols-2 gap-4">
+      <div className="bg-white rounded-lg shadow p-4 md:p-6">
+        <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-3 md:mb-4">Client Type Distribution</h2>
+        <div className="grid grid-cols-2 gap-3 md:gap-4">
           {Object.entries(analytics.clientTypeBreakdown).map(([type, count]) => (
-            <div key={type} className="p-6 border border-gray-200 rounded-lg text-center">
-              <div className="text-3xl font-bold text-gray-900">{count}</div>
-              <div className="text-sm text-gray-600 mt-2">{type} Clients</div>
+            <div key={type} className="p-4 md:p-6 border border-gray-200 rounded-lg text-center">
+              <div className="text-2xl md:text-3xl font-bold text-gray-900">{count}</div>
+              <div className="text-xs md:text-sm text-gray-600 mt-2">{type} Clients</div>
             </div>
           ))}
         </div>
       </div>
 
       {/* Top Insights */}
-      <div className="bg-gradient-to-r from-sky-50 to-indigo-50 rounded-lg shadow p-6">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Key Insights</h2>
+      <div className="bg-gradient-to-r from-sky-50 to-indigo-50 rounded-lg shadow p-4 md:p-6">
+        <h2 className="text-lg md:text-xl font-semibold text-gray-900 mb-3 md:mb-4">Key Insights</h2>
         <ul className="space-y-2">
           <li className="flex items-start">
-            <span className="text-sky-500 mr-2">•</span>
-            <span className="text-gray-700">
+            <span className="text-sky-500 mr-2 flex-shrink-0">•</span>
+            <span className="text-sm md:text-base text-gray-700">
               {analytics.statusBreakdown['Active'] || 0} projects are currently active
             </span>
           </li>
           <li className="flex items-start">
-            <span className="text-emerald-500 mr-2">•</span>
-            <span className="text-gray-700">
+            <span className="text-emerald-500 mr-2 flex-shrink-0">•</span>
+            <span className="text-sm md:text-base text-gray-700">
               {analytics.statusBreakdown['Completed'] || 0} projects have been completed
             </span>
           </li>
           <li className="flex items-start">
-            <span className="text-amber-500 mr-2">•</span>
-            <span className="text-gray-700">
+            <span className="text-amber-500 mr-2 flex-shrink-0">•</span>
+            <span className="text-sm md:text-base text-gray-700">
               {analytics.statusBreakdown['Contact Made'] || 0} new project requests pending
             </span>
           </li>
           {analytics.unassignedProjects > 0 && (
             <li className="flex items-start">
-              <span className="text-red-500 mr-2">•</span>
-              <span className="text-gray-700">
+              <span className="text-red-500 mr-2 flex-shrink-0">•</span>
+              <span className="text-sm md:text-base text-gray-700">
                 {analytics.unassignedProjects} projects need to be assigned to employees
               </span>
             </li>
           )}
           <li className="flex items-start">
-            <span className="text-purple-500 mr-2">•</span>
-            <span className="text-gray-700">
+            <span className="text-purple-500 mr-2 flex-shrink-0">•</span>
+            <span className="text-sm md:text-base text-gray-700">
               Average of {analytics.avgHoursPerProject} hours per project
             </span>
           </li>

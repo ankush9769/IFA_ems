@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuthStore } from '../stores/authStore.js';
@@ -16,6 +17,7 @@ const LayoutShell = () => {
   const { user, logout } = useAuthStore();
   const location = useLocation();
   const queryClient = useQueryClient();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
     // Clear all React Query cache
@@ -24,43 +26,74 @@ const LayoutShell = () => {
     logout();
   };
 
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
+
   // Filter links based on user role
   const visibleLinks = allLinks.filter((link) => link.roles.includes(user?.role));
 
   return (
-    <div className="layout-shell">
-      <aside>
-        <div className="brand">IFA EMS</div>
-        <nav>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50">
+      {/* Mobile Menu Toggle Button */}
+      <button 
+        className="md:hidden fixed top-4 left-4 z-50 bg-gradient-to-r from-sky-500 to-purple-600 text-white p-2.5 rounded-lg shadow-lg hover:shadow-xl transition-shadow"
+        onClick={toggleMobileMenu}
+        aria-label="Toggle menu"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M3 12h18M3 6h18M3 18h18" />
+        </svg>
+      </button>
+
+      {/* Mobile Overlay */}
+      {mobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden" 
+          onClick={closeMobileMenu}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside className={`fixed left-0 top-0 w-60 h-screen bg-gradient-to-b from-sky-500 to-purple-600 text-white p-6 flex flex-col gap-4 overflow-y-auto z-40 transition-transform duration-300 ease-in-out ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}>
+        <div className="text-xl font-bold text-white mb-2">IFA EMS</div>
+        <nav className="flex flex-col gap-2">
           {visibleLinks.map((link) => (
-            <Link key={link.href} to={link.href} className={location.pathname.startsWith(link.href) ? 'active' : ''}>
+            <Link 
+              key={link.href} 
+              to={link.href} 
+              className={`text-white no-underline px-3 py-2 rounded-lg transition-all ${location.pathname.startsWith(link.href) ? 'bg-white bg-opacity-25 font-semibold' : 'hover:bg-white hover:bg-opacity-15'}`}
+              onClick={closeMobileMenu}
+            >
               {link.label}
             </Link>
           ))}
         </nav>
       </aside>
-      <main>
-        <header className="top-bar">
-          <div>
-            <strong>{user?.name}</strong> <span style={{ marginLeft: '0.5rem', padding: '0.25rem 0.5rem', backgroundColor: '#e3f2fd', borderRadius: '4px', fontSize: '0.875rem' }}>{user?.role}</span>
+
+      {/* Main Content */}
+      <main className="md:ml-60 min-h-screen flex flex-col">
+        {/* Top Bar */}
+        <header className="sticky top-0 z-30 flex justify-between items-center px-4 md:px-8 py-4 bg-white border-b-2 border-indigo-100 shadow-sm">
+          <div className="flex items-center gap-3 ml-12 md:ml-0">
+            <strong className="text-gray-900 text-sm md:text-base">{user?.name}</strong>
+            <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs md:text-sm font-medium">{user?.role}</span>
           </div>
           <button 
             type="button" 
             onClick={handleLogout}
-            style={{ 
-              padding: '0.5rem 1rem', 
-              backgroundColor: '#dc3545', 
-              color: 'white', 
-              border: 'none', 
-              borderRadius: '4px', 
-              cursor: 'pointer',
-              fontWeight: '500'
-            }}
+            className="px-3 py-1.5 md:px-4 md:py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors text-sm md:text-base"
           >
             Logout
           </button>
         </header>
-        <section className="page-body">
+
+        {/* Page Body */}
+        <section className="flex-1 p-4 md:p-6 lg:p-8 overflow-y-auto">
           <Outlet />
         </section>
       </main>

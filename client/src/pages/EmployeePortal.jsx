@@ -76,52 +76,52 @@ const EmployeePortal = () => {
   const updates = updatesData?.updates || [];
 
   return (
-    <div className="max-w-7xl mx-auto p-6 space-y-6">
+    <div className="w-full max-w-7xl mx-auto space-y-4 md:space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Employee Portal</h1>
-        <p className="text-gray-600 mt-1">Welcome, {user?.name}!</p>
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Employee Portal</h1>
+        <p className="text-sm md:text-base text-gray-600 mt-1">Welcome, {user?.name}!</p>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="text-3xl font-bold text-sky-500">{projects.length}</div>
-          <div className="text-gray-600 text-sm mt-1">Assigned Projects</div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
+        <div className="bg-white rounded-lg shadow p-4 md:p-6">
+          <div className="text-2xl md:text-3xl font-bold text-sky-500">{projects.length}</div>
+          <div className="text-gray-600 text-xs md:text-sm mt-1">Assigned Projects</div>
         </div>
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="text-3xl font-bold text-emerald-500">
+        <div className="bg-white rounded-lg shadow p-4 md:p-6">
+          <div className="text-2xl md:text-3xl font-bold text-emerald-500">
             {projects.filter(p => p.status === 'Active').length}
           </div>
-          <div className="text-gray-600 text-sm mt-1">Active Projects</div>
+          <div className="text-gray-600 text-xs md:text-sm mt-1">Active Projects</div>
         </div>
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="text-3xl font-bold text-amber-500">
+        <div className="bg-white rounded-lg shadow p-4 md:p-6">
+          <div className="text-2xl md:text-3xl font-bold text-amber-500">
             {projects.reduce((sum, p) => sum + (p.totalHoursSpent || 0), 0)}
           </div>
-          <div className="text-gray-600 text-sm mt-1">Total Hours Logged</div>
+          <div className="text-gray-600 text-xs md:text-sm mt-1">Total Hours Logged</div>
         </div>
       </div>
 
       {/* Assigned Projects */}
       <div className="bg-white rounded-lg shadow">
-        <div className="p-6 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900">My Assigned Projects</h2>
+        <div className="p-4 md:p-6 border-b border-gray-200">
+          <h2 className="text-lg md:text-xl font-semibold text-gray-900">My Assigned Projects</h2>
         </div>
-        <div className="p-6">
+        <div className="p-4 md:p-6">
           {isLoading ? (
             <p className="text-gray-500">Loading projects...</p>
           ) : projects.length === 0 ? (
             <p className="text-gray-500">No projects assigned yet.</p>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 md:gap-4">
               {projects.map((project) => (
                 <div
                   key={project._id}
-                  className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer"
+                  className="border border-gray-200 rounded-lg p-3 md:p-4 hover:shadow-md transition-shadow cursor-pointer"
                   onClick={() => setSelectedProject(project._id)}
                 >
                   <div className="flex justify-between items-start mb-2">
-                    <h3 className="font-semibold text-gray-900">{project.clientName}</h3>
+                    <h3 className="text-sm md:text-base font-semibold text-gray-900">{project.clientName}</h3>
                     <span
                       className={`px-2 py-1 rounded text-xs font-medium ${
                         project.status === 'Active'
@@ -150,10 +150,10 @@ const EmployeePortal = () => {
 
       {/* Submit Daily Update */}
       <div className="bg-white rounded-lg shadow">
-        <div className="p-6 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900">Submit Daily Update</h2>
+        <div className="p-4 md:p-6 border-b border-gray-200">
+          <h2 className="text-lg md:text-xl font-semibold text-gray-900">Submit Daily Update</h2>
         </div>
-        <div className="p-6">
+        <div className="p-4 md:p-6">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -236,10 +236,10 @@ const EmployeePortal = () => {
       {/* Recent Updates */}
       {selectedProject && updates.length > 0 && (
         <div className="bg-white rounded-lg shadow">
-          <div className="p-6 border-b border-gray-200">
-            <h2 className="text-xl font-semibold text-gray-900">Recent Updates</h2>
+          <div className="p-4 md:p-6 border-b border-gray-200">
+            <h2 className="text-lg md:text-xl font-semibold text-gray-900">Recent Updates</h2>
           </div>
-          <div className="p-6 space-y-4">
+          <div className="p-4 md:p-6 space-y-3 md:space-y-4">
             {updates.slice(0, 5).map((update) => (
               <div key={update._id} className="border-l-4 border-sky-500 pl-4 py-2">
                 <div className="flex justify-between items-start mb-2">
