@@ -1,5 +1,10 @@
 # IFA EMS Deployment Guide
 
+## 🚀 Live Application
+
+- **Frontend**: https://ifa-ems-1frontend.onrender.com
+- **Backend**: https://ifa-ems-rsqy.onrender.com
+
 ## Backend Deployment (Render)
 
 Your backend is deployed at: **https://ifa-ems-rsqy.onrender.com**
@@ -18,7 +23,7 @@ JWT_REFRESH_SECRET=your-super-secret-refresh-key-change-in-production
 JWT_ACCESS_EXPIRES_IN=15m
 JWT_REFRESH_EXPIRES_IN=7d
 
-CLIENT_ORIGIN=https://your-frontend-domain.com,http://localhost:5173
+CLIENT_ORIGIN=https://ifa-ems-1frontend.onrender.com,http://localhost:5173
 DEADLINE_CRON=0 9 * * *
 ```
 
