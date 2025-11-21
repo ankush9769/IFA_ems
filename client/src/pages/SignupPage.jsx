@@ -1,3 +1,4 @@
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore } from '../stores/authStore.js';
@@ -6,18 +7,34 @@ const SignupPage = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate();
   const { signup } = useAuthStore();
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState('');
 
   const onSubmit = async (values) => {
-    const data = await signup(values);
+    setIsLoading(true);
+    setError('');
     
-    // Role-based redirect after signup
-    const roleRoutes = {
-      admin: '/admin',
-      employee: '/employee',
-      client: '/client',
-      applicant: '/employee',
-    };
-    navigate(roleRoutes[data.user.role] || '/admin', { replace: true });
+    try {
+      const data = await signup(values);
+      
+      // Role-based redirect after signup
+      const roleRoutes = {
+        admin: '/admin',
+        employee: '/employee',
+        client: '/client',
+        applicant: '/employee',
+      };
+      navigate(roleRoutes[data.user.role] || '/admin', { replace: true });
+    } catch (err) {
+      setIsLoading(false);
+      
+      // Handle specific error messages
+      if (err.response?.status === 409) {
+        setError('This email is already registered. Please login instead.');
+      } else {
+        setError(err.response?.data?.message || 'Failed to create account. Please try again.');
+      }
+    }
   };
 
   return (
