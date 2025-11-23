@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useAuthStore } from '../stores/authStore.js';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'https://ifa-ems-rsqy.onrender.com/api',
+  baseURL: import.meta.env.VITE_API_URL || 'https://ifa-ems-1-thebackend-server.onrender.com/api',
   withCredentials: true,
 });
 

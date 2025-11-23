@@ -2,7 +2,7 @@
 
 ## 🌐 Deployed URLs
 
-- **Frontend**: https://ifa-ems-1frontend.onrender.com
+- **Frontend**: https://ifa-ems-1-thefrontend-app.onrender.com
 - **Backend**: https://ifa-ems-1backend.onrender.com
 
 ## 📋 Configuration Updates
@@ -31,7 +31,7 @@ CLIENT_ORIGIN=https://ifa-ems-1frontend.onrender.com,http://localhost:5173
    JWT_REFRESH_SECRET=your-super-secret-refresh-key-change-in-production
    JWT_ACCESS_EXPIRES_IN=15m
    JWT_REFRESH_EXPIRES_IN=7d
-   CLIENT_ORIGIN=https://ifa-ems-1frontend.onrender.com,http://localhost:5173
+   CLIENT_ORIGIN=https://ifa-ems-1-thefrontend-app.onrender.com,http://localhost:5173
    DEADLINE_CRON=0 9 * * *
    ```
 
