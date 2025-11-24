@@ -15,11 +15,12 @@ export default function ClientPortal() {
   });
 
   const { data: projectsData, isLoading } = useQuery({
-    queryKey: ['myProjects'],
+    queryKey: ['myProjects', user?.id],
     queryFn: async () => {
       const res = await api.get('/projects');
       return res.data;
     },
+    enabled: !!user?.id,
   });
 
   const createProject = useMutation({
@@ -28,7 +29,7 @@ export default function ClientPortal() {
       return res.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['myProjects'] });
+      queryClient.invalidateQueries({ queryKey: ['myProjects', user?.id] });
       setShowForm(false);
       setFormData({
         clientName: user?.name || '',

@@ -12,11 +12,12 @@ const EmployeePortal = () => {
 
   // Fetch assigned projects
   const { data: projectsData, isLoading } = useQuery({
-    queryKey: ['myAssignedProjects'],
+    queryKey: ['myAssignedProjects', user?.id],
     queryFn: async () => {
       const res = await api.get('/projects', { params: { assigned: true } });
       return res.data;
     },
+    enabled: !!user?.id,
   });
 
   // Fetch daily updates for selected project
@@ -55,7 +56,7 @@ const EmployeePortal = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projectUpdates'] });
-      queryClient.invalidateQueries({ queryKey: ['myAssignedProjects'] });
+      queryClient.invalidateQueries({ queryKey: ['myAssignedProjects', user?.id] });
       reset();
       alert('Daily update submitted successfully!');
     },
