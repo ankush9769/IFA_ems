@@ -121,3 +121,83 @@ export const getEmployeeChecklistStatusByAdmin = async (req, res, next) => {
     next(error);
   }
 };
+
+// Get my profile (employee)
+export const getMyProfile = async (req, res, next) => {
+  try {
+    const employeeRef = req.user?.employeeRef;
+    
+    if (!employeeRef) {
+      throw createHttpError(400, 'Employee reference not found for this user');
+    }
+
+    const employee = await Employee.findById(employeeRef);
+    
+    if (!employee) {
+      throw createHttpError(404, 'Employee profile not found');
+    }
+
+    // Also get user data
+    const User = (await import('../models/User.js')).default;
+    const user = await User.findById(req.user.sub);
+
+    res.json({ employee, user });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Update my profile (employee)
+export const updateMyProfile = async (req, res, next) => {
+  try {
+    const employeeRef = req.user?.employeeRef;
+    
+    if (!employeeRef) {
+      throw createHttpError(400, 'Employee reference not found for this user');
+    }
+
+    const {
+      name,
+      contact,
+      whatsappNumber,
+      telegramHandle,
+      linkedinUrl,
+      githubUrl,
+      location,
+      availability,
+      skills,
+      roleTitle,
+    } = req.body;
+
+    const employee = await Employee.findByIdAndUpdate(
+      employeeRef,
+      {
+        name,
+        contact,
+        whatsappNumber,
+        telegramHandle,
+        linkedinUrl,
+        githubUrl,
+        location,
+        availability,
+        skills,
+        roleTitle,
+      },
+      { new: true, runValidators: true }
+    );
+
+    if (!employee) {
+      throw createHttpError(404, 'Employee profile not found');
+    }
+
+    // Also update user name if changed
+    if (name) {
+      const User = (await import('../models/User.js')).default;
+      await User.findByIdAndUpdate(req.user.sub, { name });
+    }
+
+    res.json(employee);
+  } catch (error) {
+    next(error);
+  }
+};

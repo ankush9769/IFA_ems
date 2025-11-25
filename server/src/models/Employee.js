@@ -13,6 +13,8 @@ const employeeSchema = new mongoose.Schema(
     availability: { type: String, default: 'Full-time' },
     telegramHandle: { type: String },
     whatsappNumber: { type: String },
+    linkedinUrl: { type: String },
+    githubUrl: { type: String },
     employmentType: { type: String, default: '<insert employment type list>' },
     location: { type: String },
     trainingParticipation: [{ type: mongoose.Schema.Types.ObjectId, ref: 'TrainingUpdate' }],

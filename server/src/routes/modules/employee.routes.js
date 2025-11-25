@@ -5,7 +5,9 @@ import {
   getEmployeeChecklistStatus,
   getEmployeeChecklistStatusByAdmin,
   saveChecklistStatus,
-  listEmployees 
+  listEmployees,
+  getMyProfile,
+  updateMyProfile
 } from '../../controllers/employee.controller.js';
 import { authenticate, authorize } from '../../middleware/auth.js';
 import { USER_ROLES } from '../../constants/roles.js';
@@ -14,6 +16,8 @@ const router = Router();
 
 router.use(authenticate);
 router.get('/', authorize(USER_ROLES.ADMIN), listEmployees);
+router.get('/my-profile', authorize(USER_ROLES.EMPLOYEE, USER_ROLES.APPLICANT), getMyProfile);
+router.put('/my-profile', authorize(USER_ROLES.EMPLOYEE, USER_ROLES.APPLICANT), updateMyProfile);
 router.get('/daily-updates', authorize(USER_ROLES.EMPLOYEE), getEmployeeDailyUpdates);
 router.get('/checklist-status', authorize(USER_ROLES.EMPLOYEE), getEmployeeChecklistStatus);
 router.post('/checklist-status', authorize(USER_ROLES.EMPLOYEE), saveChecklistStatus);

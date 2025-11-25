@@ -2,9 +2,11 @@ import { Route, Routes } from 'react-router-dom';
 import AdminDashboard from './pages/AdminDashboard.jsx';
 import ProjectDetailPage from './pages/ProjectDetailPage.jsx';
 import EmployeePortal from './pages/EmployeePortal.jsx';
+import EmployeeProfile from './pages/EmployeeProfile.jsx';
 import DailyUpdateChart from './pages/DailyUpdateChart.jsx';
 import EmployeeChecklist from './pages/EmployeeChecklist.jsx';
 import AdminEmployeeChecklistViewer from './pages/AdminEmployeeChecklistViewer.jsx';
+import EmployeeInfo from './pages/EmployeeInfo.jsx';
 import ClientPortal from './pages/ClientPortal.jsx';
 import ProjectAnalysis from './pages/ProjectAnalysis.jsx';
 import AdminChat from './pages/AdminChat.jsx';
@@ -65,6 +67,14 @@ const App = () => {
             </RoleGuard>
           }
         />
+        <Route
+          path="/admin/employee-info"
+          element={
+            <RoleGuard allowedRoles={['admin']}>
+              <EmployeeInfo />
+            </RoleGuard>
+          }
+        />
         
         {/* Employee routes (employees and applicants) */}
         <Route
@@ -88,6 +98,14 @@ const App = () => {
           element={
             <RoleGuard allowedRoles={['employee', 'applicant']}>
               <EmployeeChecklist />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/employee/profile"
+          element={
+            <RoleGuard allowedRoles={['employee', 'applicant']}>
+              <EmployeeProfile />
             </RoleGuard>
           }
         />
