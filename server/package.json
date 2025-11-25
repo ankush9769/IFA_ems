@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "nodemon src/server.js",
     "start": "node src/server.js",
+    "check": "node check-server.js",
     "lint": "eslint \"src/**/*.js\"",
     "test": "cross-env NODE_ENV=test jest --runInBand",
     "seed": "node src/seed/runSeed.js"

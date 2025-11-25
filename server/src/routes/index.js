@@ -7,6 +7,7 @@ import trainingRoutes from './modules/training.routes.js';
 import employeeRoutes from './modules/employee.routes.js';
 import clientRoutes from './modules/client.routes.js';
 import notificationRoutes from './modules/notification.routes.js';
+import chatRoutes from './modules/chat.routes.js';
 
 const router = Router();
 
@@ -18,6 +19,7 @@ router.use('/training-updates', trainingRoutes);
 router.use('/employees', employeeRoutes);
 router.use('/clients', clientRoutes);
 router.use('/notifications', notificationRoutes);
+router.use('/chats', chatRoutes);
 
 export default router;
 

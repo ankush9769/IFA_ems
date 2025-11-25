@@ -7,6 +7,8 @@ import EmployeeChecklist from './pages/EmployeeChecklist.jsx';
 import AdminEmployeeChecklistViewer from './pages/AdminEmployeeChecklistViewer.jsx';
 import ClientPortal from './pages/ClientPortal.jsx';
 import ProjectAnalysis from './pages/ProjectAnalysis.jsx';
+import AdminChat from './pages/AdminChat.jsx';
+import ClientChat from './pages/ClientChat.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import SignupPage from './pages/SignupPage.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
@@ -55,6 +57,14 @@ const App = () => {
             </RoleGuard>
           }
         />
+        <Route
+          path="/admin/chat"
+          element={
+            <RoleGuard allowedRoles={['admin']}>
+              <AdminChat />
+            </RoleGuard>
+          }
+        />
         
         {/* Employee routes (employees and applicants) */}
         <Route
@@ -88,6 +98,14 @@ const App = () => {
           element={
             <RoleGuard allowedRoles={['client']}>
               <ClientPortal />
+            </RoleGuard>
+          }
+        />
+        <Route
+          path="/client/chat"
+          element={
+            <RoleGuard allowedRoles={['client']}>
+              <ClientChat />
             </RoleGuard>
           }
         />

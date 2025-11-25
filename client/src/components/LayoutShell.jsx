@@ -7,10 +7,12 @@ const allLinks = [
   { href: '/admin', label: 'Admin Dashboard', roles: ['admin'] },
   { href: '/analysis', label: 'Project Analysis', roles: ['admin'] },
   { href: '/admin/employee-checklist', label: 'Employee Checklist', roles: ['admin'] },
+  { href: '/admin/chat', label: 'Chat Contacts', roles: ['admin'] },
   { href: '/employee', label: 'Employee Portal', roles: ['employee', 'applicant'] },
   { href: '/employee/daily-chart', label: 'Daily Update Chart', roles: ['employee', 'applicant'] },
   { href: '/employee/checklist', label: 'Checklist', roles: ['employee', 'applicant'] },
   { href: '/client', label: 'Client Portal', roles: ['client'] },
+  { href: '/client/chat', label: 'Chat', roles: ['client'] },
 ];
 
 const LayoutShell = () => {

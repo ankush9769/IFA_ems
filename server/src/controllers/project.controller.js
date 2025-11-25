@@ -28,15 +28,32 @@ export const listProjects = async (req, res, next) => {
       filters.assignees = req.user.employeeRef;
     }
 
-    // Optionally add role-based restrictions in future (e.g., client -> only their projects)
-    if (req.user?.role === 'client' && req.user?.clientRef) {
-      // If a client requested, restrict them to their linked client projects
-      filters.client = req.user.clientRef;
+    // IMPORTANT: Clients should only see their own projects
+    if (req.user?.role === 'client') {
+      if (req.user?.clientRef) {
+        // If client has a clientRef, filter by that
+        filters.client = req.user.clientRef;
+      } else {
+        // If client doesn't have clientRef, filter by createdBy (their user ID)
+        // This ensures clients only see projects they created
+        filters.createdBy = req.user.sub;
+      }
+    }
+
+    // Add text search if search query is provided
+    if (req.query.search) {
+      const searchRegex = new RegExp(req.query.search, 'i');
+      filters.$or = [
+        { clientName: searchRegex },
+        { projectDescription: searchRegex },
+        { projectType: searchRegex },
+      ];
     }
 
     const projects = await Project.find(filters)
       .populate('assignees leadAssignee vaIncharge freelancer updateIncharge', 'name status')
-      .populate('client', 'organization');
+      .populate('client', 'organization')
+      .sort({ createdAt: -1 }); // Sort by newest first
 
     res.json({ projects });
   } catch (error) {
@@ -117,9 +134,15 @@ export const getProject = async (req, res, next) => {
       throw createHttpError(404, 'Project not found');
     }
 
-    // If requester is client, ensure they are allowed to view this project's client
-    if (req.user.role === 'client' && String(req.user.clientRef) !== String(project.client?._id)) {
-      throw createHttpError(403, 'Not allowed');
+    // If requester is client, ensure they can only view their own projects
+    if (req.user.role === 'client') {
+      const isOwner = req.user.clientRef 
+        ? String(req.user.clientRef) === String(project.client?._id)
+        : String(req.user.sub) === String(project.createdBy);
+      
+      if (!isOwner) {
+        throw createHttpError(403, 'Not allowed to view this project');
+      }
     }
 
     res.json(project);
@@ -133,9 +156,15 @@ export const updateProject = async (req, res, next) => {
     const existing = await Project.findById(req.params.id);
     if (!existing) throw createHttpError(404, 'Project not found');
 
-    // If requester is client, ensure they can only update projects belonging to their linked client
-    if (req.user.role === 'client' && String(req.user.clientRef) !== String(existing.client)) {
-      throw createHttpError(403, 'Not allowed to update this project');
+    // If requester is client, ensure they can only update their own projects
+    if (req.user.role === 'client') {
+      const isOwner = req.user.clientRef 
+        ? String(req.user.clientRef) === String(existing.client)
+        : String(req.user.sub) === String(existing.createdBy);
+      
+      if (!isOwner) {
+        throw createHttpError(403, 'Not allowed to update this project');
+      }
     }
 
     // If client is being changed in update, validate and update client's projects arrays
@@ -173,8 +202,14 @@ export const addProjectDailyUpdate = async (req, res, next) => {
     }
 
     // If requester is client, ensure they can only add updates to their own project
-    if (req.user.role === 'client' && String(req.user.clientRef) !== String(project.client)) {
-      throw createHttpError(403, 'Not allowed to add update to this project');
+    if (req.user.role === 'client') {
+      const isOwner = req.user.clientRef 
+        ? String(req.user.clientRef) === String(project.client)
+        : String(req.user.sub) === String(project.createdBy);
+      
+      if (!isOwner) {
+        throw createHttpError(403, 'Not allowed to add update to this project');
+      }
     }
 
     const update = await DailyUpdate.create({

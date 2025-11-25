@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -14,6 +14,7 @@ const fetchProjects = async (filters) => {
   if (filters.status && filters.status !== 'All') params.status = filters.status;
   if (filters.priority && filters.priority !== 'All') params.priority = filters.priority;
   if (filters.assigned !== undefined) params.assigned = filters.assigned;
+  if (filters.search) params.search = filters.search;
   
   const { data } = await api.get('/projects', { params });
   return data;
@@ -21,9 +22,19 @@ const fetchProjects = async (filters) => {
 
 const AdminDashboard = () => {
   const queryClient = useQueryClient();
-  const [filters, setFilters] = useState({ status: 'All', priority: 'All', assigned: undefined });
+  const [filters, setFilters] = useState({ status: 'All', priority: 'All', assigned: undefined, search: '' });
+  const [searchInput, setSearchInput] = useState('');
   const [editingCell, setEditingCell] = useState(null); // { projectId, field }
   const [assignModal, setAssignModal] = useState(null); // { projectId, currentAssignees }
+  
+  // Auto-search with debounce
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setFilters((prev) => ({ ...prev, search: searchInput }));
+    }, 500); // Wait 500ms after user stops typing
+
+    return () => clearTimeout(timer);
+  }, [searchInput]);
   
   const { data: projectsData, isLoading } = useQuery({
     queryKey: ['projects', filters],
@@ -126,30 +137,66 @@ const AdminDashboard = () => {
 
       <div className="bg-white rounded-lg shadow">
         <div className="p-4 md:p-6 border-b border-gray-200">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
-            <h2 className="text-lg md:text-xl font-semibold text-gray-900">All Projects</h2>
-            <div className="flex flex-wrap gap-3">
-              <InlineSelect
-                label="Status"
-                value={filters.status}
-                onChange={(value) => setFilters((prev) => ({ ...prev, status: value }))}
-                options={['All', 'Contact Made', 'Active', 'Completed', 'Cancelled', 'Stalled']}
-              />
-              <InlineSelect
-                label="Priority"
-                value={filters.priority}
-                onChange={(value) => setFilters((prev) => ({ ...prev, priority: value }))}
-                options={['All', 'High', 'Medium', 'Low']}
-              />
-              <InlineSelect
-                label="Assignment"
-                value={filters.assigned === true ? 'Assigned' : filters.assigned === false ? 'Unassigned' : 'All'}
-                onChange={(value) => setFilters((prev) => ({ 
-                  ...prev, 
-                  assigned: value === 'Assigned' ? true : value === 'Unassigned' ? false : undefined 
-                }))}
-                options={['All', 'Assigned', 'Unassigned']}
-              />
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+              <h2 className="text-lg md:text-xl font-semibold text-gray-900">All Projects</h2>
+              <div className="flex flex-wrap gap-3">
+                <InlineSelect
+                  label="Status"
+                  value={filters.status}
+                  onChange={(value) => setFilters((prev) => ({ ...prev, status: value }))}
+                  options={['All', 'Contact Made', 'Active', 'Completed', 'Cancelled', 'Stalled']}
+                />
+                <InlineSelect
+                  label="Priority"
+                  value={filters.priority}
+                  onChange={(value) => setFilters((prev) => ({ ...prev, priority: value }))}
+                  options={['All', 'High', 'Medium', 'Low']}
+                />
+                <InlineSelect
+                  label="Assignment"
+                  value={filters.assigned === true ? 'Assigned' : filters.assigned === false ? 'Unassigned' : 'All'}
+                  onChange={(value) => setFilters((prev) => ({ 
+                    ...prev, 
+                    assigned: value === 'Assigned' ? true : value === 'Unassigned' ? false : undefined 
+                  }))}
+                  options={['All', 'Assigned', 'Unassigned']}
+                />
+              </div>
+            </div>
+            
+            {/* Search Bar - Auto-search as you type */}
+            <div className="flex gap-2">
+              <div className="flex-1 relative">
+                <input
+                  type="text"
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  placeholder="Search by client name, description, or type... (auto-search)"
+                  className="w-full px-4 py-2 pl-10 pr-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent text-sm"
+                />
+                <svg 
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                {searchInput && (
+                  <button
+                    onClick={() => {
+                      setSearchInput('');
+                    }}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    title="Clear search"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
