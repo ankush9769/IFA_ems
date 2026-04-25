@@ -45,6 +45,12 @@ const SignupPage = () => {
             <h1 className="text-3xl font-bold text-gray-900">IFA EMS</h1>
             <p className="text-gray-600 mt-2">Create your account</p>
           </div>
+
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+              <p className="text-sm">{error}</p>
+            </div>
+          )}
           
           <div className="space-y-4">
             <div>
@@ -106,9 +112,10 @@ const SignupPage = () => {
 
           <button 
             type="submit"
-            className="w-full bg-sky-500 hover:bg-sky-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg"
+            disabled={isLoading}
+            className="w-full bg-sky-500 hover:bg-sky-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
-            Sign Up
+            {isLoading ? 'Creating account...' : 'Sign Up'}
           </button>
           
           <p className="text-center text-sm text-gray-600">
